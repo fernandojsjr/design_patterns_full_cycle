@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import SimulateLoan from "../src/application/usecase/SimulateLoan";
+import SimulateLoan from "../../src/application/usecase/SimulateLoan";
 
 test("Deve simular um financiamento utilizando a tabela price", async function(){
     // given
