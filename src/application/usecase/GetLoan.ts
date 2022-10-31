@@ -10,7 +10,7 @@ export default class GetLoan {
     async execute (input: Input): Promise<Output> {
         const connetction = pgp()("postgres://postgres:mysecretpassword@localhost:5432/app");
         const [loanData] = await connetction.query("select * from fc.loan where code = $1", [input.code]);
-        const installmentsData = await connetction.query("select * from fc.installment where loan_code = $'", [input.code]);
+        const installmentsData = await connetction.query("select * from fc.installment where loan_code = $1", [input.code]);
         const output: Output = {
             code: loanData.code,
             installments: []
