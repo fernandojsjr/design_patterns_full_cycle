@@ -34,7 +34,9 @@ export default class RequestLoan {
                 if (balance.value <= 0.05) balance = currency(0);
 
                 await connetction
-                    .query("insert into fc.installment (loan_code, number, amount, interest, amortization, balance) values ($1, $2, $3, $4, $5, $6)"
+                    .query(`insert into fc.installment
+                    (loan_code, number, amount, interest, amortization, balance)
+                    values ($1, $2, $3, $4, $5, $6)`
                     , [input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value]);
 
                 // await connetction
@@ -54,7 +56,9 @@ export default class RequestLoan {
                 balance = currency(updateBalance.value - amount.value);
                 if (balance.value <= 0.05) balance = currency(0);
 
-                await connetction.query("insert into fc.installment (loan_code, number, amount, interest, amortization, balance) values ($1, $2, $3, $4, $5, $6)"
+                await connetction.query(`insert into fc.installment
+                (loan_code, number, amount, interest, amortization, balance)
+                values ($1, $2, $3, $4, $5, $6)`
                     , [input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value]);
              
                 installmentNumber++;
