@@ -1,5 +1,4 @@
 import currency from "currency.js";
-import { OutputFileType } from "typescript";
 
 export default class SimulateLoan {
 
@@ -8,7 +7,6 @@ export default class SimulateLoan {
     }
 
     async execute (input: Input): Promise<Output> {
-
         const output: Output = {
             code: input.code,
             installments: []

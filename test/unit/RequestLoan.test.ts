@@ -1,6 +1,6 @@
 import crypto from "crypto"
-import { getPositionOfLineAndCharacter } from "typescript";
-import SimulateLoan from "../../src/application/usecase/SimulateLoan";
+import GetLoan from "../../src/application/usecase/GetLoan";
+import RequestLoan from "../../src/application/usecase/RequestLoan";
 
 test("Deve aplicat para um financiamento utilizando a tabela price", async function(){
 
@@ -16,15 +16,15 @@ test("Deve aplicat para um financiamento utilizando a tabela price", async funct
     }
 
     await requestLoan.execute(inputRequestLoan);
-    const getLoan = new GetLoan();
-    const inputGetLoan = {
-        code
-    }
-    const output = await getLoan.execute(inputGetLoan);
-    expect(output.installments).toHaveLength(12);
-    const [firstInstallments] = output.installments;
-    expect(firstInstallments.balance).toBe(184230.24);
-    const lastInstallments = output.installments[output.installments.length - 1];
-    expect(lastInstallments.balance).toBe(0);    
+    // const getLoan = new GetLoan();
+    // const inputGetLoan = {
+    //     code
+    // }
+    // const output = await getLoan.execute(inputGetLoan);
+    // expect(output.installments).toHaveLength(12);
+    // const [firstInstallments] = output.installments;
+    // expect(firstInstallments.balance).toBe(184230.24);
+    // const lastInstallments = output.installments[output.installments.length - 1];
+    // expect(lastInstallments.balance).toBe(0);    
 
 });

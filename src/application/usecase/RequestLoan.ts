@@ -1,14 +1,22 @@
 import currency from "currency.js";
+import pgp from 'pg-promise';
 
 export default class RequestLoan {
     constructor () {}
 
     async execute (input: Input): Promise<void> {
+        const connetction = pgp()("postgres://postgres:mysecretpassword@localhost:5432/app");
 
         const loanAmount = input.purchasePrice - input.downPayment;
         const loanPeriod = input.period;
         const loanRate = 1;
         const loanType = input.type;
+
+        await connetction.
+            query("insert into fc.loan (code, amount, period, rate, type) values ($1, $2, $3, $4, $5)",
+            [input.code, loanAmount, loanPeriod, loanRate, loanType]);
+
+
         console.log("laonType: " + loanType);
         if(input.salary*0.25 < (loanAmount/loanPeriod)) {
             throw new Error("Insufficiente salary");
@@ -24,13 +32,15 @@ export default class RequestLoan {
                 let amortization = amount.subtract(interest);
                 balance = balance.subtract(amortization);
                 if (balance.value <= 0.05) balance = currency(0);
-                output.installments.push({
-                    installmentNumber, 
-                    amount: amount.value, 
-                    interest: interest.value, 
-                    amortization: amortization.value,
-                    balance: balance.value                    
-                })
+
+                await connetction
+                    .query("insert into fc.installment (loan_code, number, amount, interest, amortization, balance) values ($1, $2, $3, $4, $5, $6)"
+                    , [input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value]);
+
+                // await connetction
+                //     .query("insert into fc.installment (loan_code, number) values ($1, $2)"
+                //     , [input.code, installmentNumber]);
+
                 installmentNumber++;
             }
         }
@@ -43,18 +53,14 @@ export default class RequestLoan {
                 let amount = currency(interest.value + amortization.value);
                 balance = currency(updateBalance.value - amount.value);
                 if (balance.value <= 0.05) balance = currency(0);
-                //console.log(installmentNumber, amount.value, interest.value, amortization.value, balance.value);
-                output.installments.push({
-                    installmentNumber, 
-                    amount: amount.value, 
-                    interest: interest.value, 
-                    amortization: amortization.value,
-                    balance: balance.value                    
-                })                
+
+                await connetction.query("insert into fc.installment (loan_code, number, amount, interest, amortization, balance) values ($1, $2, $3, $4, $5, $6)"
+                    , [input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value]);
+             
                 installmentNumber++;
             }
         }
-        return output;
+       //connetction.$pool.end();
     }
 }
 
