@@ -1,30 +1,31 @@
-import pgp from 'pg-promise';
+import InstallmentDatabaseRepository from "../../infra/database/repository/InstallmentDatabaseRepository";
+import LoanDatabaseRepository from "../../infra/database/repository/LoanDatabaseRepositoy";
 
 
 export default class GetLoan {
-    
-    contructor () {
+
+    constructor(readonly loanRepository: LoanDatabaseRepository, readonly installmentRepository: InstallmentDatabaseRepository) {
 
     }
 
     async execute (input: Input): Promise<Output> {
-        const connetction = pgp()("postgres://postgres:mysecretpassword@localhost:5432/app");
-        const [loanData] = await connetction.query("select * from fc.loan where code = $1", [input.code]);
-        const installmentsData = await connetction.query("select * from fc.installment where loan_code = $1", [input.code]);
+        const loan = await this.loanRepository.get(input.code);
+        const installments = await this.installmentRepository.getByCode(loan.code);
+
         const output: Output = {
-            code: loanData.code,
+            code: loan.code,
             installments: []
-        };
-        for(const installmentData of installmentsData){
+        }
+
+        for(const installment of installments){
             output.installments.push({
-                installmentNumber: installmentData.number,
-                amount: parseFloat(installmentData.amount),
-                interest: parseFloat(installmentData.amortization),
-                amortization: parseFloat(installmentData.amortization),
-                balance: parseFloat(installmentData.balance)
+                installmentNumber: installment.number,
+                amount: installment.amount,
+                interest: installment.amortization,
+                amortization: installment.amortization,
+                balance: installment.balance
             })
         }
-        connetction.$pool.end();
         return output;
     }
 }

@@ -1,23 +1,23 @@
 import currency from "currency.js";
-import pgp from 'pg-promise';
+import Installment from "../../domain/entity/Installment";
+import Loan from "../../domain/entity/Loan";
+import InstallmentDatabaseRepository from "../../infra/database/repository/InstallmentDatabaseRepository";
+import LoanDatabaseRepository from "../../infra/database/repository/LoanDatabaseRepositoy";
 
 export default class RequestLoan {
-    constructor () {}
+
+    constructor (readonly loanDatabaseRepository: LoanDatabaseRepository, 
+        readonly installmentDatabaseRepository: InstallmentDatabaseRepository) {
+    }
 
     async execute (input: Input): Promise<void> {
-        const connetction = pgp()("postgres://postgres:mysecretpassword@localhost:5432/app");
-
         const loanAmount = input.purchasePrice - input.downPayment;
         const loanPeriod = input.period;
         const loanRate = 1;
         const loanType = input.type;
 
-        await connetction.
-            query("insert into fc.loan (code, amount, period, rate, type) values ($1, $2, $3, $4, $5)",
-            [input.code, loanAmount, loanPeriod, loanRate, loanType]);
+        await this.loanDatabaseRepository.save(new Loan(input.code, loanAmount, loanPeriod, loanRate, loanType));
 
-
-        console.log("laonType: " + loanType);
         if(input.salary*0.25 < (loanAmount/loanPeriod)) {
             throw new Error("Insufficiente salary");
         }
@@ -33,15 +33,7 @@ export default class RequestLoan {
                 balance = balance.subtract(amortization);
                 if (balance.value <= 0.05) balance = currency(0);
 
-                await connetction
-                    .query(`insert into fc.installment
-                    (loan_code, number, amount, interest, amortization, balance)
-                    values ($1, $2, $3, $4, $5, $6)`
-                    , [input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value]);
-
-                // await connetction
-                //     .query("insert into fc.installment (loan_code, number) values ($1, $2)"
-                //     , [input.code, installmentNumber]);
+                await this.installmentDatabaseRepository.save(new Installment(input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value));
 
                 installmentNumber++;
             }
@@ -56,15 +48,11 @@ export default class RequestLoan {
                 balance = currency(updateBalance.value - amount.value);
                 if (balance.value <= 0.05) balance = currency(0);
 
-                await connetction.query(`insert into fc.installment
-                (loan_code, number, amount, interest, amortization, balance)
-                values ($1, $2, $3, $4, $5, $6)`
-                    , [input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value]);
-             
+                await this.installmentDatabaseRepository.save(new Installment(input.code, installmentNumber, amount.value, interest.value, amortization.value, balance.value));
+
                 installmentNumber++;
             }
         }
-       //connetction.$pool.end();
     }
 }
 

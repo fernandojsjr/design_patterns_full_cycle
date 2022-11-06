@@ -15,7 +15,6 @@ export default class SimulateLoan {
         const loanPeriod = input.period;
         const loanRate = 1;
         const loanType = input.type;
-        console.log("laonType: " + loanType);
         if(input.salary*0.25 < (loanAmount/loanPeriod)) {
             throw new Error("Insufficiente salary");
         }
