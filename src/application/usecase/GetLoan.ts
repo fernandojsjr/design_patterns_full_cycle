@@ -1,6 +1,5 @@
-import InstallmentRepository from "../repository/InstallmentDatabaseRepository";
-import LoanRepository from "../repository/LoanDatabaseRepositoy";
-
+import InstallmentRepository from "../repository/InstallmentRepository";
+import LoanRepository from "../repository/LoanRepository";
 
 export default class GetLoan {
 

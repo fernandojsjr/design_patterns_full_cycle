@@ -1,8 +1,8 @@
 import currency from "currency.js";
 import Installment from "../../domain/entity/Installment";
 import Loan from "../../domain/entity/Loan";
-import InstallmentRepository from "../repository/InstallmentDatabaseRepository";
-import LoanRepository from "../repository/LoanDatabaseRepositoy";
+import InstallmentRepository from "../repository/InstallmentRepository";
+import LoanRepository from "../repository/LoanRepository";
 
 export default class RequestLoan {
 
