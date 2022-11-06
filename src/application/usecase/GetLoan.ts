@@ -1,10 +1,10 @@
-import InstallmentDatabaseRepository from "../../infra/database/repository/InstallmentDatabaseRepository";
-import LoanDatabaseRepository from "../../infra/database/repository/LoanDatabaseRepositoy";
+import InstallmentRepository from "../repository/InstallmentDatabaseRepository";
+import LoanRepository from "../repository/LoanDatabaseRepositoy";
 
 
 export default class GetLoan {
 
-    constructor(readonly loanRepository: LoanDatabaseRepository, readonly installmentRepository: InstallmentDatabaseRepository) {
+    constructor(readonly loanRepository: LoanRepository, readonly installmentRepository: InstallmentRepository) {
 
     }
 

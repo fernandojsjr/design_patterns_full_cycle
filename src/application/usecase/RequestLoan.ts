@@ -1,13 +1,13 @@
 import currency from "currency.js";
 import Installment from "../../domain/entity/Installment";
 import Loan from "../../domain/entity/Loan";
-import InstallmentDatabaseRepository from "../../infra/database/repository/InstallmentDatabaseRepository";
-import LoanDatabaseRepository from "../../infra/database/repository/LoanDatabaseRepositoy";
+import InstallmentRepository from "../repository/InstallmentDatabaseRepository";
+import LoanRepository from "../repository/LoanDatabaseRepositoy";
 
 export default class RequestLoan {
 
-    constructor (readonly loanDatabaseRepository: LoanDatabaseRepository, 
-        readonly installmentDatabaseRepository: InstallmentDatabaseRepository) {
+    constructor (readonly loanDatabaseRepository: LoanRepository, 
+        readonly installmentDatabaseRepository: InstallmentRepository) {
     }
 
     async execute (input: Input): Promise<void> {
