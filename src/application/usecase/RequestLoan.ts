@@ -4,8 +4,9 @@ import InstallmentGenerateFactory from "../../domain/factory/InstallmentGenerate
 import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
 import InstallmentRepository from "../repository/InstallmentRepository";
 import LoanRepository from "../repository/LoanRepository";
+import Usecase from "./UseCase";
 
-export default class RequestLoan {
+export default class RequestLoan implements Usecase {
     loanRepository: LoanRepository;
     installmentRepository: InstallmentRepository;
 

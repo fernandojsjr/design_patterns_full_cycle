@@ -1,4 +1,5 @@
 import crypto from "crypto"
+import LogDecorator from "../../src/application/decorator/LogDecorator";
 import InstallmentRepository from "../../src/application/repository/InstallmentRepository";
 import LoanRepository from "../../src/application/repository/LoanRepository";
 import GetLoan from "../../src/application/usecase/GetLoan";
@@ -14,7 +15,7 @@ test("Deve aplicat para um financiamento utilizando a tabela price", async funct
     const repositoryFactory = new RepositoryMemoryFactory();
 
 
-    const requestLoan = new RequestLoan(repositoryFactory);
+    const requestLoan = new LogDecorator(new RequestLoan(repositoryFactory));
     const inputRequestLoan = {
         code,
         purchasePrice: 250000,

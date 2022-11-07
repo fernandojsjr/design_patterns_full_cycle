@@ -1,14 +1,16 @@
 import Installment from "../../domain/entity/Installment";
 import LoanPrice from "../../domain/entity/LoanPrice";
 import LoanSac from "../../domain/entity/LoanSac";
+import Usecase from "./UseCase";
 
-export default class SimulateLoan {
+export default class SimulateLoan implements Usecase {
 
     constructor () {
 
     }
 
     async execute (input: Input): Promise<Output> {
+        console.log(new Date());
         const output: Output = {
             code: input.code,
             installments: []
