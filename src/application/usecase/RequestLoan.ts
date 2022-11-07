@@ -16,7 +16,7 @@ export default class RequestLoan {
         const loanRate = 1;
         const loanType = input.type;
 
-        await this.loanDatabaseRepository.save(new Loan(input.code, amount, loanPeriod, loanRate, loanType));
+        await this.loanDatabaseRepository.save(new Loan(input.code, amount, loanPeriod, loanRate, loanType, input.salary));
 
         if(input.salary*0.25 < (amount/loanPeriod)) {
             throw new Error("Insufficiente salary");

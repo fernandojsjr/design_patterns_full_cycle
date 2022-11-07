@@ -1,8 +1,6 @@
-import currency from "currency.js";
 import Installment from "../../domain/entity/Installment";
-import InstallmentGenerateFactory from "../../domain/factory/InstallmentGenerateFactory";
-import InstallmentGeneratorPrice from "../../domain/InstallmentGeneratorPrice";
-import InstallmentGeneratorSac from "../../domain/InstallmentGeneratorSac";
+import LoanPrice from "../../domain/entity/LoanPrice";
+import LoanSac from "../../domain/entity/LoanSac";
 
 export default class SimulateLoan {
 
@@ -19,12 +17,17 @@ export default class SimulateLoan {
         const loanPeriod = input.period;
         const loanRate = 1;
         const loanType = input.type;
+        let installments: Installment[] = [];
+        if(loanType === "price"){
+            const loan = new LoanPrice(input.code, amount, loanPeriod, loanRate, loanType, input.salary);
+            installments = loan.generateInstallments();
 
-        if(input.salary*0.25 < (amount/loanPeriod)) {
-            throw new Error("Insufficiente salary");
         }
-        const generateInstallments = InstallmentGenerateFactory.create(loanType);
-        const installments = await generateInstallments.generate(input.code, amount, input.period, loanRate);
+        if(loanType === "sac"){
+            const loan = new LoanSac(input.code, amount, loanPeriod, loanRate, loanType, input.salary);
+            installments = loan.generateInstallments();
+        }
+
         for(const installment of installments) {
             output.installments.push({
                 installmentNumber: installment.number,

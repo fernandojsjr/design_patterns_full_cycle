@@ -7,7 +7,8 @@ export default abstract class AbastractLoan {
         readonly amount: number ,
         readonly period: number,
         readonly rate: number,
-        readonly type: string
+        readonly type: string,
+        readonly salary: number
     ){}
 
     abstract generateInstallments (): Installment[];

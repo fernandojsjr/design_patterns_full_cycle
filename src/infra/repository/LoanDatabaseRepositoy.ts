@@ -17,6 +17,6 @@ export default class LoanDatabaseRepository {
     async get (code: string): Promise<Loan> {
         const [loanData] = await this.connection.query("select * from fc.loan where code = $1", [code]);
         if(!Loan) throw Error();
-        return new Loan(loanData.code, parseFloat(loanData.amount), loanData.period, loanData.rate, loanData.type);
+        return new Loan(loanData.code, parseFloat(loanData.amount), loanData.period, loanData.rate, loanData.type, 100000);
     }
 }
