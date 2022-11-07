@@ -1,7 +1,7 @@
 import currency from "currency.js";
 import Installment from "../../domain/entity/Installment";
-import GenerateInstallmentsPrice from "../../domain/GenerateInstallmentsPrice";
-import GenerateInstallmentsSac from "../../domain/GenerateInstallmentsSac";
+import InstallmentGeneratorPrice from "../../domain/InstallmentGeneratorPrice";
+import InstallmentGeneratorSac from "../../domain/InstallmentGeneratorSac";
 
 export default class SimulateLoan {
 
@@ -25,12 +25,12 @@ export default class SimulateLoan {
         
         let installments: Installment[] = [];
         if(loanType === 'price'){
-            const generateInstallments = new GenerateInstallmentsPrice();
+            const generateInstallments = new InstallmentGeneratorPrice();
             installments = await generateInstallments.generate(input.code, amount, input.period, loanRate);
 
         }
         if (loanType === "sac") {
-            const generateInstallments = new GenerateInstallmentsSac();
+            const generateInstallments = new InstallmentGeneratorSac();
             installments = await generateInstallments.generate(input.code, amount, input.period, loanRate);
         }
 

@@ -1,8 +1,8 @@
 import currency from "currency.js";
 import Installment from "./entity/Installment";
-import GenerateInstallments from "./GenerateInstallments";
+import InstallmentGenerator from "./InstallmentGenerator";
 
-export default class GenerateInstallmentsPrice implements GenerateInstallments {
+export default class InstallmentGeneratorPrice implements InstallmentGenerator {
     
     async generate(loanCode: string, loanAmount: number, loanPeriod: number, loanRate: number): Promise<Installment[]> {
         const installments: Installment[] = [];
