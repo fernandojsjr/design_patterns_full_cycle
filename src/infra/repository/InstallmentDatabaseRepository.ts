@@ -1,5 +1,5 @@
-import Installment from "../../../domain/entity/Installment";
-import Connection from "../Connection";
+import Installment from "../../domain/entity/Installment";
+import Connection from "../database/Connection";
 
 export default class InstallmentDatabaseRepository {
 

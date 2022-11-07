@@ -4,10 +4,9 @@ import LoanRepository from "../../src/application/repository/LoanRepository";
 import GetLoan from "../../src/application/usecase/GetLoan";
 import RequestLoan from "../../src/application/usecase/RequestLoan";
 import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
-import InstallmentDatabaseRepository from "../../src/infra/database/repository/InstallmentDatabaseRepository";
-import LoanDatabaseRepository from "../../src/infra/database/repository/LoanDatabaseRepositoy";
-import InstallmentMemoryRepository from "../../src/infra/database/repository/memory/InstallmentMemoryRepository";
-import LoanMemoryRepository from "../../src/infra/database/repository/memory/LoanMemoryRepository";
+import InstallmentDatabaseRepository from "../../src/infra/repository/InstallmentDatabaseRepository";
+import LoanDatabaseRepository from "../../src/infra/repository/LoanDatabaseRepositoy";
+
 
 test("Deve aplicat para um financiamento utilizando a tabela price", async function(){
 

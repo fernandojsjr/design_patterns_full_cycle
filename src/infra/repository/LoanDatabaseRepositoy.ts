@@ -1,5 +1,5 @@
-import Loan from "../../../domain/entity/Loan";
-import Connection from "../Connection";
+import Loan from "../../domain/entity/Loan";
+import Connection from "../database/Connection";
 
 export default class LoanDatabaseRepository {
 
