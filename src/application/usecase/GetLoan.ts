@@ -1,10 +1,15 @@
+import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
 import InstallmentRepository from "../repository/InstallmentRepository";
 import LoanRepository from "../repository/LoanRepository";
 
 export default class GetLoan {
 
-    constructor(readonly loanRepository: LoanRepository, readonly installmentRepository: InstallmentRepository) {
+    loanRepository: LoanRepository;
+    installmentRepository: InstallmentRepository;
 
+    constructor (readonly repositoryFactory: RepositoryAbastractFactory) {
+        this.loanRepository = repositoryFactory.createLoanRepository();
+        this.installmentRepository = repositoryFactory.createInstallmentRepository();
     }
 
     async execute (input: Input): Promise<Output> {

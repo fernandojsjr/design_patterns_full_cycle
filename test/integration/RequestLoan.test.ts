@@ -4,21 +4,17 @@ import LoanRepository from "../../src/application/repository/LoanRepository";
 import GetLoan from "../../src/application/usecase/GetLoan";
 import RequestLoan from "../../src/application/usecase/RequestLoan";
 import PgPromiseConnection from "../../src/infra/database/PgPromiseConnection";
-import InstallmentDatabaseRepository from "../../src/infra/repository/InstallmentDatabaseRepository";
-import LoanDatabaseRepository from "../../src/infra/repository/LoanDatabaseRepositoy";
-
+import RepositoryMemoryFactory from "../../src/infra/factory/RepositoryMemoryFactory";
 
 test("Deve aplicat para um financiamento utilizando a tabela price", async function(){
 
     const code = crypto.randomUUID();
     const connection = new PgPromiseConnection();
-    const loanRepository = new LoanDatabaseRepository(connection);
-    const installmentRepository = new InstallmentDatabaseRepository(connection);
+    //const repositoryFactory = new RepositoryDatabaseFactory(connection);
+    const repositoryFactory = new RepositoryMemoryFactory();
 
-    //const installmentRepository: InstallmentRepository = new InstallmentMemoryRepository();
-    //const loanRepository: LoanRepository = new LoanMemoryRepository()
 
-    const requestLoan = new RequestLoan(loanRepository, installmentRepository);
+    const requestLoan = new RequestLoan(repositoryFactory);
     const inputRequestLoan = {
         code,
         purchasePrice: 250000,
@@ -29,7 +25,7 @@ test("Deve aplicat para um financiamento utilizando a tabela price", async funct
     }
 
     await requestLoan.execute(inputRequestLoan);
-    const getLoan = new GetLoan(loanRepository, installmentRepository);
+    const getLoan = new GetLoan(repositoryFactory);
     const inputGetLoan = {
         code
     }

@@ -1,12 +1,21 @@
-import LoanRepository from "../../../../application/repository/LoanRepository";
-import Loan from "../../../../domain/entity/Loan";
+import LoanRepository from "../../../application/repository/LoanRepository";
+import Installment from "../../../domain/entity/Installment";
+import Loan from "../../../domain/entity/Loan";
 
 export default class LoanMemoryRepository implements LoanRepository {
 
     loans: Loan[];
+    static instance: LoanMemoryRepository;
 
-    constructor() {
+    private constructor() {
         this.loans = [];
+    }
+
+    static getInstance () {
+        if (!LoanMemoryRepository.instance){
+            LoanMemoryRepository.instance = new LoanMemoryRepository();
+        }
+        return LoanMemoryRepository.instance;
     }
 
     async save(loan: Loan): Promise<void> {

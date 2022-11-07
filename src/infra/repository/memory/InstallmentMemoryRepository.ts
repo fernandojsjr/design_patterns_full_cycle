@@ -1,12 +1,20 @@
-import InstallmentRepository from "../../../../application/repository/InstallmentRepository";
-import Installment from "../../../../domain/entity/Installment";
+import InstallmentRepository from "../../../application/repository/InstallmentRepository";
+import Installment from "../../../domain/entity/Installment";
 
 export default class InstallmentMemoryRepository implements InstallmentRepository {
     
     installments: Installment[];
+    static instance: InstallmentMemoryRepository;
 
-    constructor() {
+    private constructor() {
         this.installments = [];
+    }
+
+    static getInstance () {
+        if(!InstallmentMemoryRepository.instance){
+            InstallmentMemoryRepository.instance = new InstallmentMemoryRepository();
+        }
+        return InstallmentMemoryRepository.instance;
     }
     
     async save(installment: Installment): Promise<void> {

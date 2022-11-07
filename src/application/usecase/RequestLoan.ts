@@ -1,13 +1,17 @@
 import Installment from "../../domain/entity/Installment";
 import Loan from "../../domain/entity/Loan";
 import InstallmentGenerateFactory from "../../domain/factory/InstallmentGenerateFactory";
+import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
 import InstallmentRepository from "../repository/InstallmentRepository";
 import LoanRepository from "../repository/LoanRepository";
 
 export default class RequestLoan {
+    loanRepository: LoanRepository;
+    installmentRepository: InstallmentRepository;
 
-    constructor (readonly loanDatabaseRepository: LoanRepository, 
-        readonly installmentDatabaseRepository: InstallmentRepository) {
+    constructor (readonly repositoryFactory: RepositoryAbastractFactory) {
+        this.loanRepository = repositoryFactory.createLoanRepository();
+        this.installmentRepository = repositoryFactory.createInstallmentRepository();
     }
 
     async execute (input: Input): Promise<void> {
@@ -16,7 +20,7 @@ export default class RequestLoan {
         const loanRate = 1;
         const loanType = input.type;
 
-        await this.loanDatabaseRepository.save(new Loan(input.code, amount, loanPeriod, loanRate, loanType, input.salary));
+        await this.loanRepository.save(new Loan(input.code, amount, loanPeriod, loanRate, loanType, input.salary));
 
         if(input.salary*0.25 < (amount/loanPeriod)) {
             throw new Error("Insufficiente salary");
@@ -24,7 +28,7 @@ export default class RequestLoan {
         const generateInstallments = InstallmentGenerateFactory.create(loanType);
         const installments = await generateInstallments.generate(input.code, amount, input.period, loanRate);
         for(const installment of installments) {
-                await this.installmentDatabaseRepository.save(new Installment(input.code, installment.number, 
+                await this.installmentRepository.save(new Installment(input.code, installment.number, 
                     installment.amount, installment.interest, 
                     installment.amortization, installment.balance));
         }
