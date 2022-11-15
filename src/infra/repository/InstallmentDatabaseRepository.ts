@@ -7,7 +7,7 @@ export default class InstallmentDatabaseRepository {
 
     }
 
-    async save(installment: Installment) {
+    async save(installment: Installment): Promise<any> {
         await this.connection
             .query(`insert into fc.installment
         (loan_code, number, amount, interest, amortization, balance)
